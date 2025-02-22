@@ -7,3 +7,5 @@ print("   ")
 print("sl")
 
 print("branch")
+
+print("merge")
