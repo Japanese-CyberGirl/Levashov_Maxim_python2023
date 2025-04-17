@@ -25,3 +25,4 @@ secrets.py
 # Тестовые данные
 /test_data/
 /tmp/
+/tests
