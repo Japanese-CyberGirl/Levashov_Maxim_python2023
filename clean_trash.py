@@ -15,6 +15,10 @@ path = args.trash_folder_path
 input_time = args.age_thr
 current_time = time.time()
 
+log_file = open("clean_trash.log", "a")
+
+
+
 for root , directory , file in os.walk(path):
     for filename in file:
         path = os.path.join(root, filename)
@@ -23,4 +27,7 @@ for root , directory , file in os.walk(path):
         if (current_time - file_time) > input_time:
             print(f"Deleting: {path}")
             os.remove(path)
+            log_file.write(f"Removed file: {path}\n")
+            log_file.flush() #принудительно записываем информацию в логи
+
 
