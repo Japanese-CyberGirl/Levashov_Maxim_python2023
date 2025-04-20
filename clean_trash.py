@@ -11,7 +11,7 @@ parser.add_argument("--age_thr", help = "Time to delete", type = int, required =
 
 args = parser.parse_args()
 
-path = args.trash_folder_path
+trash_path = args.trash_folder_path
 input_time = args.age_thr
 #current_time = time.time()
 
@@ -21,7 +21,7 @@ log_file = open("clean_trash.log", "a")
 while(True):
     current_time = time.time()
     #удаление обычных файлов
-    for root , directory , file in os.walk(path):
+    for root , directory , file in os.walk(trash_path):
         for filename in file:
             file_path = os.path.join(root, filename)
             file_time = os.path.getmtime(file_path)
@@ -33,7 +33,7 @@ while(True):
                 log_file.flush() #принудительно записываем информацию в логи
 
 
-    for root, directory, file in os.walk(path, topdown = False): #удаление пустых папок, начиная с конца, а не с родительских
+    for root, directory, file in os.walk(trash_path, topdown = False): #удаление пустых папок, начиная с конца, а не с родительских
         for directory_name in directory:
             directory_path = os.path.join(root, directory_name)
             if not os.listdir(directory_path): #если папка пустая, то удаляем...
