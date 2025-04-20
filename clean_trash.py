@@ -13,30 +13,32 @@ args = parser.parse_args()
 
 path = args.trash_folder_path
 input_time = args.age_thr
-current_time = time.time()
+#current_time = time.time()
 
 log_file = open("clean_trash.log", "a")
 
 
+while(True):
+    current_time = time.time()
+    #удаление обычных файлов
+    for root , directory , file in os.walk(path):
+        for filename in file:
+            file_path = os.path.join(root, filename)
+            file_time = os.path.getmtime(file_path)
+            print(file_time)
+            if (current_time - file_time) > input_time:
+                print(f"Deleting: {file_path}")
+                os.remove(file_path)
+                log_file.write(f"Removed file: {file_path}\n")
+                log_file.flush() #принудительно записываем информацию в логи
 
-for root , directory , file in os.walk(path):
-    for filename in file:
-        path = os.path.join(root, filename)
-        file_time = os.path.getmtime(path)
-        print(file_time)
-        if (current_time - file_time) > input_time:
-            print(f"Deleting: {path}")
-            os.remove(path)
-            log_file.write(f"Removed file: {path}\n")
-            log_file.flush() #принудительно записываем информацию в логи
 
+    for root, directory, file in os.walk(path, topdown = False): #удаление пустых папок, начиная с конца, а не с родительских
+        for directory_name in directory:
+            directory_path = os.path.join(root, directory_name)
+            if not os.listdir(directory_path): #если папка пустая, то удаляем...
+                os.rmdir(directory_path)
+                log_file.write(f"Removed empty directory {directory_path}\n")
+                log_file.flush()
 
-for root, directory, file in os.walk(path, topdown = False):
-    for directory_name in directory:
-        directory_path = os.path.join(root, directory_name)
-        if not os.listdir(directory_path):
-            os.rmdir(directory_path)
-            log_file.write(f"Removed empty directory {directory_path}\n")
-            log_file.flush()
-
-time.sleep(1)
+    time.sleep(1)
