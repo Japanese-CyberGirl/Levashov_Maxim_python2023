@@ -31,3 +31,12 @@ for root , directory , file in os.walk(path):
             log_file.flush() #принудительно записываем информацию в логи
 
 
+for root, directory, file in os.walk(path, topdown = False):
+    for directory_name in directory:
+        directory_path = os.path.join(root, directory_name)
+        if not os.listdir(directory_path):
+            os.rmdir(directory_path)
+            log_file.write(f"Removed empty directory {directory_path}\n")
+            log_file.flush()
+
+time.sleep(1)
